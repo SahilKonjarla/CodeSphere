@@ -3,3 +3,5 @@ langchain
 pydantic
 uvicorn
 langchain-openai
+langchain-core
+langchain-community
