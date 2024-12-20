@@ -5,3 +5,5 @@ uvicorn
 langchain-openai
 langchain-core
 langchain-community
+pytest
+pytest-mock
