@@ -10,7 +10,6 @@ debug_router = APIRouter()
 # Define the request model
 class DebugRequest(BaseModel):
     code: str  # The code snippet to debug
-    language: str = "python"  # Optional, defaults to python
 
 
 # Define the /api/v1/debug endpoint
@@ -21,7 +20,7 @@ async def debug_code(request: DebugRequest):
     """
     try:
         # Call the service layer to process the debugging request
-        result = process_debug_request(request.code, request.language)
+        result = process_debug_request(request.code)
 
         # Return the debugging results as a structured response
         return result

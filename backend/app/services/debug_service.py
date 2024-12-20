@@ -32,10 +32,10 @@ def process_debug_request(code: str, language: str = "python"):
     # Prompt for the agent
     prompt = f"""
     You are going to be a friendly debugging assistant. You're task is to assist the developer in debugging their code i.e. help them find syntax,
-    logic, or runtime errors. Now please analyze the following {language} code:
+    logic, or runtime errors. Now please analyze the following code:
     {code}
     Identify any syntax, logic, or runtime errors. Explain the errors and suggest fixes. If there are no fixes to be made, just say there are no fixes
-    to be made.
+    to be made. Please remove the languag
     """
 
     # Call the agent and get the response
@@ -80,7 +80,8 @@ def parse_agent_response(response: str) -> dict:
 
     try:
         # Split the response by sections if structured
-        lines = response.split("\n")
+        print(response.content)
+        lines = response.content.split("\n")
         issues_section = False
         suggestions_section = False
 
@@ -88,7 +89,7 @@ def parse_agent_response(response: str) -> dict:
             if "Issues:" in line:
                 issues_section = True
                 suggestions_section = False
-            elif "Suggestions:" in line:
+            elif "Suggested:" in line:
                 issues_section = False
                 suggestions_section = True
             elif issues_section:
