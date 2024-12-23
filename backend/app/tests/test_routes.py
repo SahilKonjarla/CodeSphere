@@ -9,8 +9,7 @@ def test_debug_route_valid_input():
     Test /debug with valid input.
     """
     payload = {
-        "code": "if x = 10: print(x)",
-        "language": "python"
+        "code": "if x = 10: print(x)"
     }
 
     response = client.post("/debug", json=payload)
@@ -28,10 +27,9 @@ def test_debug_route_missing_code():
     Test /debug with missing code field.
     """
     payload = {
-        "language": "python"
     }
 
-    response = client.post("/debug", json=payload)
+    response = client.post("api/v1/debug", json=payload)
 
     # Assert validation error (422 Unprocessable Entity)
     assert response.status_code == 422
@@ -45,11 +43,10 @@ def test_debug_route_service_error():
     # Mock the service to raise an error
     with patch("app.services.debug_service.process_debug_request", side_effect=RuntimeError("Service error")):
         payload = {
-            "code": "print('Hello World')",
-            "language": "python"
+            "code": "print('Hello World')"
         }
 
-        response = client.post("/debug", json=payload)
+        response = client.post("api/v1/debug", json=payload)
 
         # Assert internal server error (500)
         assert response.status_code == 500

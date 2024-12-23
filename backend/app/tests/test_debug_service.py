@@ -13,16 +13,15 @@ Explanation:
 """
 
 
-@patch("app.services.debug_service.call_langchain", return_value=MOCK_LLM_RESPONSE)
+@patch("app.services.debug_service.call_agent", return_value=MOCK_LLM_RESPONSE)
 def test_process_debug_request_valid_code(mock_call_langchain):
     """
     Test process_debug_request with valid code.
     """
     code = "if x = 10: print(x)"
-    language = "python"
 
     # Call the function
-    result = process_debug_request(code, language)
+    result = process_debug_request(code)
 
     # Assert the parsed output
     assert result["issues"] == ["Syntax error on line 3."]
@@ -35,21 +34,19 @@ def test_process_debug_request_empty_code():
     Test process_debug_request with empty code input.
     """
     code = ""
-    language = "python"
 
     # Call the function and assert it raises a ValueError
     with pytest.raises(ValueError, match="Code snippet cannot be empty."):
-        process_debug_request(code, language)
+        process_debug_request(code)
 
 
-@patch("app.services.debug_service.call_langchain", side_effect=Exception("Mock LLM error"))
+@patch("app.services.debug_service.call_agent", side_effect=Exception("Mock LLM error"))
 def test_process_debug_request_langchain_error(mock_call_langchain):
     """
     Test process_debug_request when LangChain interaction fails.
     """
     code = "print('Hello World')"
-    language = "python"
 
     # Call the function and assert it raises a RuntimeError
     with pytest.raises(RuntimeError, match="Error communicating with the LLM: Mock LLM error"):
-        process_debug_request(code, language)
+        process_debug_request(code)
