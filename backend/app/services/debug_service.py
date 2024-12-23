@@ -14,12 +14,11 @@ if not OPEN_AI_KEY:
 model = ChatOpenAI(model="gpt-4o-mini")
 
 
-def process_debug_request(code: str, language: str = "python"):
+def process_debug_request(code: str):
     """
     Process the debugging request and return structured results.
     Args:
         code (str): The code snippet to debug.
-        language (str): The programming language of the code (default: Python).
 
     Returns:
         dict: A structured response with debugging results.
@@ -68,8 +67,7 @@ def call_agent(prompt: str) -> str:
 # Helper function to parse the agent response
 def parse_agent_response(response: str) -> dict:
     """
-    Parses the raw response from the LLM.
-    :param response:
+    :param response: Parses the raw response from the LLM.
     :return: dict : A structure response containing issues, suggestions, and explanations.
     """
     parsed_data = {
@@ -80,7 +78,6 @@ def parse_agent_response(response: str) -> dict:
 
     try:
         # Split the response by sections if structured
-        print(response.content)
         lines = response.content.split("\n")
         issues_section = False
         suggestions_section = False

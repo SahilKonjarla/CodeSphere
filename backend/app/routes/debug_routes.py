@@ -34,5 +34,5 @@ async def debug_code(request: DebugRequest):
         # Handle unexpected error gracefully
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An error occurred while processing your request."
+            detail=str(e)
         )
