@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
+from app.utils.prompts import get_optimize_prompt
 
 # Load Environment Variable
 load_dotenv()  # Ensure the .env file is loaded
@@ -23,29 +24,10 @@ def process_optimize_request(code: str, goal: str = "Looking at the code given. 
 
     # A check to see if the user inputted code
     if not code.strip():
-        raise ValueError("Code snipped cannot be empty")
+        raise ValueError("Code snippet cannot be empty")
 
     # Prompt for the agent
-    prompt = f"""
-    You are an expert software optimizer specializing in analyzing code for inefficiencies and providing improvements. 
-
-    Analyze the following code:
-    
-    {code}
-    
-    Your task is to:
-    1. Identify inefficiencies in the code (e.g., redundant operations, slow algorithms, or excessive memory usage).
-    2. Suggest specific optimizations to improve performance, reduce memory usage, or achieve other stated goals.
-    3. Provide a detailed explanation for your suggestions, including why they improve the code and any trade-offs.
-    
-    Optimization Goal: {goal}
-    If no inefficiencies are found, confirm that the code is already optimized and explain why no changes are necessary.
-    
-    In your output please structure it as such:
-    Inefficiencies: Your response will go here
-    Suggestions: Your response will go here
-    Explanation: Your response will go here
-    """
+    prompt = get_optimize_prompt(code, goal)
 
     try:
         agent_response = call_agent(prompt)

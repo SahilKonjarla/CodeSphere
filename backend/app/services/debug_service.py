@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
+from app.utils.prompts import get_debug_prompt
 
 # Load Environment Variables
 load_dotenv()  # ensure the .env file is loaded
@@ -29,24 +30,7 @@ def process_debug_request(code: str):
         raise ValueError("Code Snippet cannot be empty")
 
     # Prompt for the agent
-    prompt = f"""
-    You are an expert debugging assistant. Your job is to analyze code for errors and provide detailed explanations and solutions.
-
-    Here is the code snippet that needs to be debugged:
-    {code}
-    
-    Your task is to:
-    1. Identify any syntax, logical, or runtime errors in the code. Be specific about the issues and indicate the line numbers if possible.
-    2. Suggest corrections or improvements for each issue.
-    3. Provide a detailed explanation for each issue, including why it occurs and how your suggested solution resolves it.
-    
-    If the code has no errors, confirm that it is valid and explain why the code works correctly.
-    
-    Return the output in the following structure:
-    - Errors: A list of identified issues in the code.
-    - Suggestions: A list of corrections or improvements.
-    - Explanation: A detailed explanation of the errors and solutions.
-    """
+    prompt = get_debug_prompt(code)
 
     # Call the agent and get the response
     try:

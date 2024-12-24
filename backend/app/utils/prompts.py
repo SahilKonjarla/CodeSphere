@@ -40,3 +40,44 @@ def get_debug_prompt(code: str) -> str:
         - Suggestions: A list of corrections or improvements.
         - Explanation: A detailed explanation of the errors and solutions.
     """
+
+
+def get_docstring_prompt(code: str) -> str:
+    return f"""
+    You are an expert in programming. Generate comprehensive docstrings for the following code:
+    
+    {code}
+    
+    Include descriptions for parameters, return values, and exceptions if applicable.
+    """
+
+
+def get_comments_prompt(code: str) -> str:
+    return f"""
+        You are an expert in programming. Add inline comments to the following code to explain its logic:
+
+        {code}
+        """
+
+
+def get_overview_prompt(code: str) -> str:
+    return f"""
+        You are an expert in programming. Provide a high-level overview of the functionality of the following code:
+
+        {code}
+        """
+
+
+def get_readme_prompt(code: str) -> str:
+    return f"""
+        You are an expert technical writer. Generate a README.md file for the following code:
+
+        {code}
+
+        Include:
+        - A title for the project.
+        - The purpose of the code.
+        - Usage instructions, including input and output details.
+        - Dependencies or requirements.
+        - Example usage.
+        """
