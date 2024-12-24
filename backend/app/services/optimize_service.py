@@ -47,14 +47,15 @@ def process_optimize_request(code: str, goal: str = "Looking at the code given. 
     Explanation: Your response will go here
     """
 
-    try :
+    try:
         agent_response = call_agent(prompt)
     except Exception as e:
         raise RuntimeError(f"Error communicating with optimize_agent: {str(e)}")
 
     # Parse the response and extract useful information
     parsed_response = parse_agent_response(agent_response)
-    return agent_response, parsed_response
+    return parsed_response
+
 
 # Helper function to interact with LangChain
 def call_agent(prompt):
@@ -67,6 +68,7 @@ def call_agent(prompt):
     response = model.invoke(prompt)
     return response
 
+
 # Helper function to parse the agent_response
 def parse_agent_response(response: str) -> dict:
     """
@@ -76,7 +78,7 @@ def parse_agent_response(response: str) -> dict:
     parsed_data = {
         "inefficiencies": [],
         "suggestions": [],
-        "explanations": []
+        "explanations": ""
     }
 
     try:

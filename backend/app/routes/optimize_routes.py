@@ -34,5 +34,5 @@ async def optimize_code(request: OptimizeRequest):
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=str(e)
+            detail=f"Error occurred in server: {str(e)}"
         )
