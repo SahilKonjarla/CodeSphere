@@ -9,12 +9,11 @@ def test_debug_route_valid_input():
     Test /debug with valid input.
     """
     payload = {
-        "code": "if x = 10: print(x)"
+        "code": "if x = 10: print(x)",
     }
 
-    response = client.post("/debug", json=payload)
+    response = client.post("api/v1/debug", json=payload)
 
-    # Assert response status and content
     assert response.status_code == 200
     data = response.json()
     assert "issues" in data
@@ -22,33 +21,54 @@ def test_debug_route_valid_input():
     assert "explanation" in data
 
 
-def test_debug_route_missing_code():
+def test_optimize_route_valid_input():
     """
-    Test /debug with missing code field.
+    Test /optimize with valid input.
     """
     payload = {
+        "code": "for i in range(100): print(i)",
+        "goal": "performance"
     }
 
-    response = client.post("api/v1/debug", json=payload)
+    response = client.post("api/v1/optimize", json=payload)
 
-    # Assert validation error (422 Unprocessable Entity)
+    assert response.status_code == 200
+    data = response.json()
+    assert "inefficiencies" in data
+    assert "suggestions" in data
+    assert "explanation" in data
+
+
+def test_optimize_route_missing_code():
+    """
+    Test /optimize with missing code field.
+    """
+    payload = {
+        "goal": "performance"
+    }
+
+    response = client.post("api/v1/optimize", json=payload)
+
     assert response.status_code == 422
     assert "detail" in response.json()
 
 
-def test_debug_route_service_error():
+def test_optimize_route_service_error(mocker):
     """
-    Test /debug when the service layer raises an error.
+    Test /optimize when the service layer raises an error.
     """
-    # Mock the service to raise an error
-    with patch("app.services.debug_service.process_debug_request", side_effect=RuntimeError("Service error")):
-        payload = {
-            "code": "print('Hello World')"
-        }
+    # Mock the service to raise a RuntimeError
+    mocker.patch(
+        "app.services.optimize_service.process_optimization_request",
+        side_effect=RuntimeError("Mocked service error")
+    )
 
-        response = client.post("api/v1/debug", json=payload)
+    payload = {
+        "code": "for i in range(100): print(i)",
+        "goal": "performance"
+    }
 
-        # Assert internal server error (500)
-        assert response.status_code == 500
-        assert "detail" in response.json()
-        assert response.json()["detail"] == "An error occurred while processing your request."
+    response = client.post("api/v1/optimize", json=payload)
+
+    assert response.status_code == 500
+    assert response.json()["detail"] == "An internal error occurred while processing the optimization request."
