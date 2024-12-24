@@ -20,19 +20,6 @@ if not OPEN_AI_KEY:
 model = ChatOpenAI(OPEN_AI_KEY)
 
 
-# Middleware function to call the correct document type
-def call_documentation_type(code: str, doc_type: str):
-    # Check for the specific docstring and call the correct function
-    if doc_type == "docstring":
-        return process_docstring_request(code)
-    elif doc_type == "comments":
-        return process_comments_request(code)
-    elif doc_type == "overview":
-        return process_overview_request(code)
-    elif doc_type == "readme":
-        return process_readme_request(code)
-
-
 # Helper function to interact with LangChain
 def call_agent(prompt):
     """

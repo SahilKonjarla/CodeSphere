@@ -44,11 +44,14 @@ def get_debug_prompt(code: str) -> str:
 
 def get_docstring_prompt(code: str) -> str:
     return f"""
-    You are an expert in programming. Generate comprehensive docstrings for the following code:
-    
-    {code}
-    
-    Include descriptions for parameters, return values, and exceptions if applicable.
+        You are an expert in programming. Generate comprehensive docstrings for the following code:
+        
+        {code}
+        
+        Include descriptions for parameters, return values, and exceptions if applicable.
+        
+        In your response please structure it as such:
+        Docstring: Your response will go here
     """
 
 
@@ -57,7 +60,10 @@ def get_comments_prompt(code: str) -> str:
         You are an expert in programming. Add inline comments to the following code to explain its logic:
 
         {code}
-        """
+        
+        In your response please structure it as such:
+        Comments: Your response will go here
+    """
 
 
 def get_overview_prompt(code: str) -> str:
@@ -65,7 +71,9 @@ def get_overview_prompt(code: str) -> str:
         You are an expert in programming. Provide a high-level overview of the functionality of the following code:
 
         {code}
-        """
+        In your response please structure it as such:
+        Overview: Your response will go here
+    """
 
 
 def get_readme_prompt(code: str) -> str:
@@ -80,4 +88,7 @@ def get_readme_prompt(code: str) -> str:
         - Usage instructions, including input and output details.
         - Dependencies or requirements.
         - Example usage.
-        """
+        
+        In your response please structure it as such:
+        README: Your response will go here
+    """
