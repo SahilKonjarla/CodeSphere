@@ -34,7 +34,12 @@ def process_debug_request(code: str):
     logic, or runtime errors. Now please analyze the following code:
     {code}
     Identify any syntax, logic, or runtime errors. Explain the errors and suggest fixes. If there are no fixes to be made, just say there are no fixes
-    to be made. Please remove the languag
+    to be made.
+    
+    In your output please structure it as such:
+    1. Errors: Your response will go here
+    2. Suggestions: Your response will go here
+    3. Explanations: Your response will go here
     """
 
     # Call the agent and get the response
@@ -71,30 +76,37 @@ def parse_agent_response(response: str) -> dict:
     :return: dict : A structure response containing issues, suggestions, and explanations.
     """
     parsed_data = {
-        "issues": [],
+        "errors": [],
         "suggestions": [],
-        "explanation": ""
+        "explanation": []
     }
 
     try:
         # Split the response by sections if structured
+        print(response.content)
         lines = response.content.split("\n")
         issues_section = False
         suggestions_section = False
-
+        explanation_section = False
         for line in lines:
-            if "Issues:" in line:
+            if "Errors" in line:
                 issues_section = True
                 suggestions_section = False
-            elif "Suggested:" in line:
+                explanation_section = False
+            elif "Suggestions" in line:
                 issues_section = False
                 suggestions_section = True
+                explanation_section = False
+            elif "Explanations" in line:
+                explanation_section = True
+                suggestions_section = False
+                issues_section = False
             elif issues_section:
-                parsed_data["issues"].append(line.strip())
+                parsed_data["errors"].append(line.strip())
             elif suggestions_section:
                 parsed_data["suggestions"].append(line.strip())
-            else:
-                parsed_data["explanation"] += f"{line.strip()} "
+            elif explanation_section:
+                parsed_data["explanation"].append(line.strip())
 
     except Exception as e:
         parsed_data["explanation"] = f"Error parsing response: {str(e)}"

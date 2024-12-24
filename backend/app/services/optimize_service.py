@@ -78,30 +78,37 @@ def parse_agent_response(response: str) -> dict:
     parsed_data = {
         "inefficiencies": [],
         "suggestions": [],
-        "explanations": ""
+        "explanation": []
     }
 
     try:
         # Split the response by sections if structured
+        print(response.content)
         lines = response.content.split("\n")
         inefficiencies_section = False
         suggestions_section = False
-
+        explanation_section = False
         for line in lines:
             if "Inefficiencies" in line:
                 inefficiencies_section = True
                 suggestions_section = False
+                explanation_section = False
             elif "Suggestions" in line:
                 suggestions_section = True
+                inefficiencies_section = False
+                explanation_section = False
+            elif "Explanation" in line:
+                explanation_section = True
+                suggestions_section = False
                 inefficiencies_section = False
             elif inefficiencies_section:
                 parsed_data["inefficiencies"].append(line.strip())
             elif suggestions_section:
                 parsed_data["suggestions"].append(line.strip())
-            else:
-                parsed_data["explanations"].append(line.strip())
+            elif explanation_section:
+                parsed_data["explanation"].append(line.strip())
 
     except Exception as e:
-        parsed_data["explanations"] = f"Error parsing response: {str(e)}"
+        parsed_data["explanation"] = f"Error parsing response: {str(e)}"
 
     return parsed_data

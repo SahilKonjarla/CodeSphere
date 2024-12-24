@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 
 
 class OptimizeResponse(BaseModel):
@@ -8,7 +8,7 @@ class OptimizeResponse(BaseModel):
     """
     inefficiencies: List[str]
     suggestions: List[str]
-    explanation: str
+    explanation: List[str]
 
     class Config:
         """
@@ -18,8 +18,8 @@ class OptimizeResponse(BaseModel):
             "example": {
                 "inefficiencies": ["There are some structural errors when you are iterating through the loop"],
                 "suggestions": ["Instead of a double for loop use the two pointer implementation"],
-                "explanation": (
+                "explanation": [
                     "The code is having some runtime issues when using the double for loop"
-                )
+                ]
             }
         }

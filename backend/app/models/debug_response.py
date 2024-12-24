@@ -6,9 +6,9 @@ class DebugResponse(BaseModel):
     """
     Schema for the debug response.
     """
-    issues: List[str]
+    errors: List[str]
     suggestions: List[str]
-    explanation: str
+    explanation: List[str]
 
     class Config:
         """
@@ -16,11 +16,11 @@ class DebugResponse(BaseModel):
         """
         schema_extra = {
             "example": {
-                "issues": ["Syntax error on line 5: Unexpected token '='"],
+                "errors": ["Syntax error on line 5: Unexpected token '='"],
                 "suggestions": ["Replace '=' with '==' for comparison"],
-                "explanation": (
+                "explanation": [
                     "The code attempted to use '=' in a conditional statement, "
                     "which is invalid syntax. Use '==' for comparisons."
-                ),
+                ]
             }
         }
