@@ -10,7 +10,7 @@ OPEN_AI_KEY = os.getenv("OPENAI_API_KEY")
 if not OPEN_AI_KEY:
     raise EnvironmentError("OPENAI_API_KEY environment variable is not set")
 
-# Initialize LLm
+# Initialize LLM
 model = ChatOpenAI(model="gpt-4o-mini")
 
 
