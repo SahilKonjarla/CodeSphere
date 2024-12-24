@@ -30,16 +30,22 @@ def process_debug_request(code: str):
 
     # Prompt for the agent
     prompt = f"""
-    You are going to be a friendly debugging assistant. You're task is to assist the developer in debugging their code i.e. help them find syntax,
-    logic, or runtime errors. Now please analyze the following code:
+    You are an expert debugging assistant. Your job is to analyze code for errors and provide detailed explanations and solutions.
+
+    Here is the code snippet that needs to be debugged:
     {code}
-    Identify any syntax, logic, or runtime errors. Explain the errors and suggest fixes. If there are no fixes to be made, just say there are no fixes
-    to be made.
     
-    In your output please structure it as such:
-    1. Errors: Your response will go here
-    2. Suggestions: Your response will go here
-    3. Explanations: Your response will go here
+    Your task is to:
+    1. Identify any syntax, logical, or runtime errors in the code. Be specific about the issues and indicate the line numbers if possible.
+    2. Suggest corrections or improvements for each issue.
+    3. Provide a detailed explanation for each issue, including why it occurs and how your suggested solution resolves it.
+    
+    If the code has no errors, confirm that it is valid and explain why the code works correctly.
+    
+    Return the output in the following structure:
+    - Errors: A list of identified issues in the code.
+    - Suggestions: A list of corrections or improvements.
+    - Explanation: A detailed explanation of the errors and solutions.
     """
 
     # Call the agent and get the response
@@ -85,23 +91,23 @@ def parse_agent_response(response: str) -> dict:
         # Split the response by sections if structured
         print(response.content)
         lines = response.content.split("\n")
-        issues_section = False
+        errors_section = False
         suggestions_section = False
         explanation_section = False
         for line in lines:
             if "Errors" in line:
-                issues_section = True
+                errors_section = True
                 suggestions_section = False
                 explanation_section = False
             elif "Suggestions" in line:
-                issues_section = False
+                errors_section = False
                 suggestions_section = True
                 explanation_section = False
-            elif "Explanations" in line:
+            elif "Explanation" in line:
                 explanation_section = True
                 suggestions_section = False
-                issues_section = False
-            elif issues_section:
+                errors_section = False
+            elif errors_section:
                 parsed_data["errors"].append(line.strip())
             elif suggestions_section:
                 parsed_data["suggestions"].append(line.strip())
