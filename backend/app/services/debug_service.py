@@ -1,7 +1,9 @@
+import datetime
 import os
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from app.utils.prompts import get_debug_prompt
+from app.db.user_logs import save_user_logs
 
 # Load Environment Variables
 load_dotenv()  # ensure the .env file is loaded
@@ -15,10 +17,11 @@ if not OPEN_AI_KEY:
 model = ChatOpenAI(model="gpt-4o-mini")
 
 
-def process_debug_request(code: str):
+def process_debug_request(user_id: str, code: str):
     """
     Process the debugging request and return structured results.
     Args:
+        user_id (str): The user ID.
         code (str): The code snippet to debug.
 
     Returns:
@@ -40,6 +43,13 @@ def process_debug_request(code: str):
 
     # Parse the response and extract useful information
     parsed_response = parse_agent_response(agent_response)
+    save_user_logs(
+        user_id=user_id,
+        agents="debug",
+        request={code},
+        response=parsed_response,
+        timestamp=datetime.datetime.now().isoformat(),
+    )
     return parsed_response
 
 

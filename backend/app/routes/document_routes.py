@@ -15,6 +15,7 @@ document_router = APIRouter()
 # Define the request model
 class DocumentRequest(BaseModel):
     code: str  # The code snippet to document
+    user_id: str  # The user id
 
 
 # Define the /api/v1/document/docstring endpoint
@@ -28,7 +29,7 @@ async def document_code(request: DocumentRequest):
 
     try:
         # Call the service layer to process the documentation request
-        result = process_docstring_request(request.code)
+        result = process_docstring_request(request.user_id, request.code)
 
         # Return the documentation results as a structured response
         return result

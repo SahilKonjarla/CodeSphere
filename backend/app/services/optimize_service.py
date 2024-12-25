@@ -1,7 +1,9 @@
+import datetime
 import os
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from app.utils.prompts import get_optimize_prompt
+from app.db.user_logs import save_user_logs
 
 # Load Environment Variable
 load_dotenv()  # Ensure the .env file is loaded
@@ -15,8 +17,9 @@ if not OPEN_AI_KEY:
 model = ChatOpenAI(model="gpt-4o-mini")
 
 
-def process_optimize_request(code: str, goal: str = "Looking at the code given. Please improve either the structure, memory usage, or runtime"):
+def process_optimize_request(user_id: str, code: str, goal: str = "Looking at the code given. Please improve either the structure, memory usage, or runtime"):
     """
+    :param user_id: The id of the user
     :param code: The code to be optimized
     :param goal: What the user wants to be optimized
     :return: The LLM response
@@ -36,6 +39,13 @@ def process_optimize_request(code: str, goal: str = "Looking at the code given. 
 
     # Parse the response and extract useful information
     parsed_response = parse_agent_response(agent_response)
+    save_user_logs(
+        user_id=user_id,
+        agents="optimize",
+        request={code, goal},
+        response=parsed_response,
+        timestamp=datetime.datetime.now().isoformat(),
+    )
     return parsed_response
 
 

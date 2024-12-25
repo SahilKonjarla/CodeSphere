@@ -11,6 +11,7 @@ class OptimizeRequest(BaseModel):
     code: str  # The code snippet to optimize
     # How the user wants to optimize the code inputted
     goal: str = "Looking at the code given. Please improve either the structure, memory usage, or runtime"
+    user_id: str  # The user id
 
 
 @optimize_router.post("/api/v1/optimize", response_model=OptimizeResponse)
@@ -22,7 +23,7 @@ async def optimize_code(request: OptimizeRequest):
     """
     try:
         # Call the service layer to process the optimization results
-        result = process_optimize_request(request.code, request.goal)
+        result = process_optimize_request(request.user_id, request.code, request.goal)
 
         # Return the optimization results
         return result

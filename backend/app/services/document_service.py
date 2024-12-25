@@ -1,6 +1,8 @@
+import datetime
 import os
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
+from app.db.user_logs import save_user_logs
 from app.utils.prompts import (
     get_docstring_prompt,
     get_comments_prompt,
@@ -90,8 +92,9 @@ def parse_agent_response(response: str) -> dict:
 
 
 # Process docstring request
-def process_docstring_request(code: str):
+def process_docstring_request(user_id: str, code: str):
     """
+    :param user_id:
     :param code: The code snippet from the user
     :return: The parsed LLM response
     """
@@ -110,12 +113,20 @@ def process_docstring_request(code: str):
 
     # Parse the response and extract useful information
     parsed_response = parse_agent_response(agent_response)
+    save_user_logs(
+        user_id=user_id,
+        agents="document",
+        request={code},
+        response=parsed_response,
+        timestamp=datetime.datetime.now().isoformat(),
+    )
     return parsed_response
 
 
 # Process comments request
-def process_comments_request(code: str):
+def process_comments_request(user_id: str, code: str):
     """
+    :param user_id:
     :param code: The code snippet from the user
     :return: The parsed LLM response
     """
@@ -134,12 +145,20 @@ def process_comments_request(code: str):
 
     # Parse the response and extract useful information
     parsed_response = parse_agent_response(agent_response)
+    save_user_logs(
+        user_id=user_id,
+        agents="document",
+        request={code},
+        response=parsed_response,
+        timestamp=datetime.datetime.now().isoformat(),
+    )
     return parsed_response
 
 
 # Process overview request
-def process_overview_request(code: str):
+def process_overview_request(user_id: str, code: str):
     """
+    :param user_id:
     :param code: The code snippet from the user
     :return: The parsed LLM response
     """
@@ -158,12 +177,20 @@ def process_overview_request(code: str):
 
     # Parse the response and extract useful information
     parsed_response = parse_agent_response(agent_response)
+    save_user_logs(
+        user_id=user_id,
+        agents="document",
+        request={code},
+        response=parsed_response,
+        timestamp=datetime.datetime.now().isoformat(),
+    )
     return parsed_response
 
 
 # Process README request
-def process_readme_request(code: str):
+def process_readme_request(user_id: str, code: str):
     """
+    :param user_id:
     :param code: The code snippet from the user
     :return: The parsed LLM response
     """
@@ -182,4 +209,11 @@ def process_readme_request(code: str):
 
     # Parse the response and extract useful information
     parsed_response = parse_agent_response(agent_response)
+    save_user_logs(
+        user_id=user_id,
+        agents="document",
+        request={code},
+        response=parsed_response,
+        timestamp=datetime.datetime.now().isoformat(),
+    )
     return parsed_response
