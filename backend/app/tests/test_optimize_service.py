@@ -12,7 +12,7 @@ The current implementation iterates through a large range and stores results unn
 """
 
 
-@patch("app.services.optimize_service.call_langchain", return_value=MOCK_OPTIMIZE_RESPONSE)
+@patch("app.services.optimize_service.call_agent", return_value=MOCK_OPTIMIZE_RESPONSE)
 def test_process_optimization_request_valid_code(mock_call_langchain):
     """
     Test process_optimization_request with valid code input.
@@ -40,7 +40,7 @@ def test_process_optimization_request_empty_code():
         process_optimization_request(code, language, goal)
 
 
-@patch("app.services.optimize_service.call_langchain", side_effect=Exception("LangChain API error"))
+@patch("app.services.optimize_service.call_agent", side_effect=Exception("LangChain API error"))
 def test_process_optimization_request_langchain_error(mock_call_langchain):
     """
     Test process_optimization_request when LangChain interaction fails.
