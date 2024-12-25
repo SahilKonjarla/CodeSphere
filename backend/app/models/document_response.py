@@ -9,7 +9,7 @@ class DocumentResponse(BaseModel):
     docstring: Optional[List[str]]
     readme: Optional[List[str]]
     overview: Optional[List[str]]
-    comments: Optional[List[str]]
+    comments: Optional[List[str]] = None
 
     class Config:
         """

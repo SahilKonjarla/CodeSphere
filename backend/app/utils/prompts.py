@@ -50,8 +50,9 @@ def get_docstring_prompt(code: str) -> str:
         
         Include descriptions for parameters, return values, and exceptions if applicable.
         
-        In your response please structure it as such:
-        Docstring: Your response will go here
+        In your response please before you give your response include the word Docstring and then
+        include your response after
+        
     """
 
 
@@ -61,8 +62,9 @@ def get_comments_prompt(code: str) -> str:
 
         {code}
         
-        In your response please structure it as such:
-        Comments: Your response will go here
+        IIn your response please before you give your response include the word Comments and then
+        include your response after
+        
     """
 
 
@@ -71,8 +73,10 @@ def get_overview_prompt(code: str) -> str:
         You are an expert in programming. Provide a high-level overview of the functionality of the following code:
 
         {code}
-        In your response please structure it as such:
-        Overview: Your response will go here
+        
+        In your response please before you give your response include the word Overview and then
+        include your response after in a new line
+        
     """
 
 
@@ -89,6 +93,7 @@ def get_readme_prompt(code: str) -> str:
         - Dependencies or requirements.
         - Example usage.
         
-        In your response please structure it as such:
-        README: Your response will go here
+        In your response please before you give your response include the word README and then
+        include your response after
+        
     """

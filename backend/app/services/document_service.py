@@ -17,7 +17,7 @@ if not OPEN_AI_KEY:
     raise EnvironmentError("OPENAI_API_KEY environment variable is not set")
 
 # Initialize LLM
-model = ChatOpenAI(OPEN_AI_KEY)
+model = ChatOpenAI(model="gpt-4o-mini")
 
 
 # Helper function to interact with LangChain
@@ -42,7 +42,7 @@ def parse_agent_response(response: str) -> dict:
         "docstring": [],
         "readme": [],
         "overview": [],
-        "comment": []
+        "comments": []
     }
 
     try:
@@ -68,7 +68,7 @@ def parse_agent_response(response: str) -> dict:
                 overview_section = True
                 docstring_section = False
                 readme_section = False
-                overview_section = False
+                comments_section = False
             elif "Comments" in line:
                 comments_section = True
                 docstring_section = False
@@ -81,7 +81,7 @@ def parse_agent_response(response: str) -> dict:
             elif overview_section:
                 parsed_data["overview"].append(line.strip())
             elif comments_section:
-                parsed_data["comment"].append(line.strip())
+                parsed_data["comments"].append(line.strip())
 
     except Exception as e:
         parsed_data["docstring"] = f"Error parsing response: {str(e)}"
@@ -173,7 +173,7 @@ def process_readme_request(code: str):
         raise ValueError("Code cannot be empty")
 
     # Prompt for the agent
-    prompt = get_docstring_prompt(code)
+    prompt = get_readme_prompt(code)
 
     try:
         agent_response = call_agent(prompt)
