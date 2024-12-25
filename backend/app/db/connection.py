@@ -24,7 +24,6 @@ def get_db_connection():
             dbname=DB_NAME,
             user=DB_USER,
         )
-        print("Connected to CodeSphere Database")
         return conn
     except Exception as e:
         raise RuntimeError(f"Unable to connect to the database: str{e}")

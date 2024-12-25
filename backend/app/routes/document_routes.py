@@ -58,7 +58,7 @@ async def document_code(request: DocumentRequest):
 
     try:
         # Call the service layer to process the documentation request
-        result = process_comments_request(request.code)
+        result = process_comments_request(request.user_id, request.code)
 
         # Return the documentation results as a structured response
         return result
@@ -87,7 +87,7 @@ async def document_code(request: DocumentRequest):
 
     try:
         # Call the service layer to process the documentation request
-        result = process_overview_request(request.code)
+        result = process_overview_request(request.user_id, request.code)
 
         # Return the documentation results as a structured response
         return result
@@ -116,7 +116,7 @@ async def document_code(request: DocumentRequest):
 
     try:
         # Call the service layer to process the documentation request
-        result = process_readme_request(request.code)
+        result = process_readme_request(request.user_id, request.code)
 
         # Return the documentation results as a structured response
         return result

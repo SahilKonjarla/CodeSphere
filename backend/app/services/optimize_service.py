@@ -41,8 +41,12 @@ def process_optimize_request(user_id: str, code: str, goal: str = "Looking at th
     parsed_response = parse_agent_response(agent_response)
     save_user_logs(
         user_id=user_id,
-        agents="optimize",
-        request={code, goal},
+        agent="optimize",
+        request={
+            "code": code,
+            "goal": goal,
+            "user_id": user_id
+        },
         response=parsed_response,
         timestamp=datetime.datetime.now().isoformat(),
     )

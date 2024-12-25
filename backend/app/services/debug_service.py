@@ -45,8 +45,11 @@ def process_debug_request(user_id: str, code: str):
     parsed_response = parse_agent_response(agent_response)
     save_user_logs(
         user_id=user_id,
-        agents="debug",
-        request={code},
+        agent="debug",
+        request={
+            "code": code,
+            "user_id": user_id
+        },
         response=parsed_response,
         timestamp=datetime.datetime.now().isoformat(),
     )

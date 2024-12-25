@@ -2,7 +2,19 @@ import json
 from app.db.connection import get_db_connection
 
 
-def save_user_log(user_id, agent, request, response, timestamp=None):
+# Ensure the response is JSON-serializable helper function
+def ensure_json_serializable(data):
+    if isinstance(data, dict):
+        return {
+            key: list(value) if isinstance(value, set) else ensure_json_serializable(value)
+            for key, value in data.items()
+        }
+    elif isinstance(data, list):
+        return [ensure_json_serializable(item) for item in data]
+    return data
+
+
+def save_user_logs(user_id, agent, request, response, timestamp=None):
     """
     Inserts a new user log into the `user_logs` table.
 
@@ -15,6 +27,8 @@ def save_user_log(user_id, agent, request, response, timestamp=None):
     cursor = None
     conn = None
     try:
+        serialized_response = json.dumps(ensure_json_serializable(response))
+        serialized_request = json.dumps(ensure_json_serializable(request))
         connection = get_db_connection()
         cursor = connection.cursor()
 
@@ -28,13 +42,14 @@ def save_user_log(user_id, agent, request, response, timestamp=None):
             (
                 user_id,
                 agent,
-                json.dumps(request),
-                json.dumps(response),
+                serialized_request,
+                serialized_response,
                 timestamp,
             ),
         )
 
         connection.commit()
+        print("INSERT Successful --------------")
     except Exception as e:
         raise RuntimeError(f"Error while inserting user logs: str{e}")
     finally:

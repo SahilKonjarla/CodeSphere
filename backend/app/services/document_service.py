@@ -115,8 +115,11 @@ def process_docstring_request(user_id: str, code: str):
     parsed_response = parse_agent_response(agent_response)
     save_user_logs(
         user_id=user_id,
-        agents="document",
-        request={code},
+        agent="document",
+        request={
+            "code": code,
+            "user_id": user_id
+        },
         response=parsed_response,
         timestamp=datetime.datetime.now().isoformat(),
     )
@@ -147,8 +150,11 @@ def process_comments_request(user_id: str, code: str):
     parsed_response = parse_agent_response(agent_response)
     save_user_logs(
         user_id=user_id,
-        agents="document",
-        request={code},
+        agent="document",
+        request={
+            "code": code,
+            "user_id": user_id
+        },
         response=parsed_response,
         timestamp=datetime.datetime.now().isoformat(),
     )
@@ -179,8 +185,11 @@ def process_overview_request(user_id: str, code: str):
     parsed_response = parse_agent_response(agent_response)
     save_user_logs(
         user_id=user_id,
-        agents="document",
-        request={code},
+        agent="document",
+        request={
+            "code": code,
+            "user_id": user_id
+        },
         response=parsed_response,
         timestamp=datetime.datetime.now().isoformat(),
     )
@@ -211,8 +220,11 @@ def process_readme_request(user_id: str, code: str):
     parsed_response = parse_agent_response(agent_response)
     save_user_logs(
         user_id=user_id,
-        agents="document",
-        request={code},
+        agent="document",
+        request={
+            "code": code,
+            "user_id": user_id
+        },
         response=parsed_response,
         timestamp=datetime.datetime.now().isoformat(),
     )
