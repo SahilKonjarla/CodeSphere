@@ -27,16 +27,21 @@ def save_user_logs(user_id, agent, request, response, timestamp=None):
     cursor = None
     conn = None
     try:
+        # Serialize the request and response
         serialized_response = json.dumps(ensure_json_serializable(response))
         serialized_request = json.dumps(ensure_json_serializable(request))
+
+        # Initialize connection to database and create interaction instance
         connection = get_db_connection()
         cursor = connection.cursor()
 
+        # Query for the database
         query = f"""
             INSERT INTO user_logs (user_id, agent, request, response, timestamp)
             VALUES (%s, %s, %s, %s, %s)
             """
 
+        # Query execution
         cursor.execute(
             query,
             (
@@ -48,10 +53,46 @@ def save_user_logs(user_id, agent, request, response, timestamp=None):
             ),
         )
 
+        # Commit the execution to the database
         connection.commit()
         print("INSERT Successful --------------")
     except Exception as e:
         raise RuntimeError(f"Error while inserting user logs: str{e}")
     finally:
         if conn:
+            cursor.close()
+
+
+def get_user_logs(user_id):
+    """
+    Retrieves the top 10 most recent interactions of user_id extracts
+    :param user_id: The ID of the user
+    :return: A list of user_logs
+    """
+    connection = None
+    cursor = None
+    try:
+        # Initialize connection and interaction point
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        # Query to retrieve the data
+        query = """
+            SELECT *
+            FROM user_logs
+            Where user_id = %s
+            ORDER BY timestamp DESC
+            LIMIT 10
+        """
+
+        # Execute the query
+        cursor.execute(query, user_id)
+        logs = cursor.fetchall()
+
+        print("RETRIEVAL SUCCESSFUL---------------")
+        return logs  # Return the logs
+    except Exception as e:
+        raise RuntimeError(f"Error while retrieving user logs: {str(e)}")
+    finally:
+        if connection:
             cursor.close()
