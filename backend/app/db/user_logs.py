@@ -63,7 +63,7 @@ def save_user_logs(user_id, agent, request, response, timestamp=None):
             cursor.close()
 
 
-def get_user_logs(user_id):
+def get_user_logs(user_id: str):
     """
     Retrieves the top 10 most recent interactions of user_id extracts
     :param user_id: The ID of the user
@@ -86,7 +86,8 @@ def get_user_logs(user_id):
         """
 
         # Execute the query
-        cursor.execute(query, user_id)
+        user_id = str(user_id)
+        cursor.execute(query, (user_id,))
         logs = cursor.fetchall()
 
         print("RETRIEVAL SUCCESSFUL---------------")

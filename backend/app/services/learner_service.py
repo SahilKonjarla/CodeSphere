@@ -55,9 +55,7 @@ def parse_logs(logs):
     parsed_logs = []
     for log in logs:
         # Extract individual fields from the log
-        request = log.get("request", {})
-        response = log.get("response", {})
-        agent = log.get("agent", "")
+        log_id, user_id, agent, request, response, timestamp = log
 
         if agent == "debug":
             parsed_logs.append({
@@ -66,7 +64,7 @@ def parse_logs(logs):
                 "errors": response.get("errors", []),
                 "suggestions": response.get("suggestions", []),
                 "explanation": response.get("explanation", []),
-                "timestamp": log.get("timestamp", ""),
+                "timestamp": timestamp,
             })
         elif agent == "optimize":
             parsed_logs.append({
@@ -75,7 +73,7 @@ def parse_logs(logs):
                 "inefficiencies": response.get("inefficiencies", []),
                 "suggestions": response.get("suggestions", []),
                 "explanation": response.get("explanation", []),
-                "timestamp": log.get("timestamp", ""),
+                "timestamp": timestamp,
             })
         elif agent == "document":
             parsed_logs.append({
@@ -85,7 +83,7 @@ def parse_logs(logs):
                 "readme": response.get("readme", []),
                 "overview": response.get("overview", []),
                 "comments": response.get("comments", []),
-                "timestamp": log.get("timestamp", ""),
+                "timestamp": timestamp,
             })
         else:
             # Fallback for unknown agent types
@@ -93,7 +91,7 @@ def parse_logs(logs):
                 "request": request,
                 "response": response,
                 "agent": agent,
-                "timestamp": log.get("timestamp", "")
+                "timestamp": timestamp
             })
 
     return parsed_logs

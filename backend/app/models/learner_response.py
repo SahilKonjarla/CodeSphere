@@ -6,9 +6,9 @@ class LearnerResponse(BaseModel):
     """
     Schema for Learner response.
     """
-    trends: List[int]
-    recommendations: List[int]
-    resources: List[int]
+    trends: List[str]
+    recommendations: List[str]
+    resources: List[str]
 
     class Config:
         """

@@ -9,7 +9,7 @@ learner_router = APIRouter()
 
 # Define the request model
 class LearnerRequest(BaseModel):
-    user_id: int  # The id of the user
+    user_id: str  # The id of the user
 
 
 @learner_router.post("/api/v1/learner", response_model=LearnerResponse)

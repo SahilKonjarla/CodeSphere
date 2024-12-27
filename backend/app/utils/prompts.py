@@ -121,7 +121,6 @@ def get_learner_prompt(parsed_logs: list) -> str:
     for idx, log in enumerate(parsed_logs, start=1):
         prompt += f"{idx}. Agent: {log['agent']}\n"
         prompt += f"   - Code: {log.get('code', 'N/A')}\n"
-        prompt += f"   - Language: {log.get('language', 'N/A')}\n"
 
         # Add agent-specific details
         if log['agent'] == "debugging":
