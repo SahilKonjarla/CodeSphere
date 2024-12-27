@@ -84,7 +84,6 @@ def parse_agent_response(response: str) -> dict:
                 parsed_data["overview"].append(line.strip())
             elif comments_section:
                 parsed_data["comments"].append(line.strip())
-
     except Exception as e:
         parsed_data["docstring"] = f"Error parsing response: {str(e)}"
 

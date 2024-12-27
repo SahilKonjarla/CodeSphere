@@ -31,3 +31,112 @@ def process_learner_request(user_id: str):
 
     # Parse the logs for useful data
     parsed_data = parse_logs(logs)
+
+    # Create the prompt with user_logs
+    prompt = get_learner_prompt(parsed_data)
+
+    try:
+        # Send the prompt to the agent
+        agent_response = model.invoke(prompt)
+    except Exception as e:
+        raise RuntimeError(f"Failed to generate recommendations for user {user_id}") from e
+
+    recs = parse_agent_response(agent_response)
+    return recs
+
+
+def parse_logs(logs):
+    """
+    Extract relevant information from the logs.
+
+    :param logs: A list of user logs from the database.
+    :return: Parsed data for prompt construction.
+    """
+    parsed_logs = []
+    for log in logs:
+        # Extract individual fields from the log
+        request = log.get("request", {})
+        response = log.get("response", {})
+        agent = log.get("agent", "")
+
+        if agent == "debug":
+            parsed_logs.append({
+                "code": request.get("code", ""),
+                "agent": agent,
+                "errors": response.get("errors", []),
+                "suggestions": response.get("suggestions", []),
+                "explanation": response.get("explanation", []),
+                "timestamp": log.get("timestamp", ""),
+            })
+        elif agent == "optimize":
+            parsed_logs.append({
+                "code": request.get("code", ""),
+                "agent": agent,
+                "inefficiencies": response.get("inefficiencies", []),
+                "suggestions": response.get("suggestions", []),
+                "explanation": response.get("explanation", []),
+                "timestamp": log.get("timestamp", ""),
+            })
+        elif agent == "document":
+            parsed_logs.append({
+                "code": request.get("code", ""),
+                "agent": agent,
+                "docstring": response.get("docstring", []),
+                "readme": response.get("readme", []),
+                "overview": response.get("overview", []),
+                "comments": response.get("comments", []),
+                "timestamp": log.get("timestamp", ""),
+            })
+        else:
+            # Fallback for unknown agent types
+            parsed_logs.append({
+                "request": request,
+                "response": response,
+                "agent": agent,
+                "timestamp": log.get("timestamp", "")
+            })
+
+    return parsed_logs
+
+
+def parse_agent_response(response: str) -> dict:
+    """
+    Parse the raw response from the agent into structured recommendations.
+    :param response: The raw response from the agent.
+    :return: A structured dictionary containing the parsed data.
+    """
+    parsed_data = {
+        "trends": [],
+        "recommendations": [],
+        "resources": []
+    }
+
+    try:
+        print(response.content)
+        lines = response.content.split("\n")
+        trends_section = False
+        recommendations_section = False
+        resources_section = False
+        for line in lines:
+            if "Trends" in line:
+                trends_section = True
+                recommendations_section = False
+                resources_section = False
+            elif "Recommendations" in line:
+                recommendations_section = True
+                resources_section = False
+                trends_section = False
+            elif "Resources" in line:
+                resources_section = True
+                trends_section = False
+                recommendations_section = False
+            elif trends_section:
+                parsed_data["trends"].append(line.strip())
+            elif recommendations_section:
+                parsed_data["recommendations"].append(line.strip())
+            elif resources_section:
+                parsed_data["resources"].append(line.strip())
+    except Exception as e:
+        raise RuntimeError(f"Failed to parse agent response: {str(e)}")
+
+    return parsed_data

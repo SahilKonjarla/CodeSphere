@@ -97,3 +97,63 @@ def get_readme_prompt(code: str) -> str:
         include your response after
         
     """
+
+
+def get_learner_prompt(parsed_logs: list) -> str:
+    """
+    Constructs a dynamic prompt for the Learner Agent based on parsed user logs.
+
+    :param parsed_logs: A list of parsed logs containing details of user interactions.
+    :return: A formatted prompt string for the Learner Agent.
+    """
+    if not parsed_logs:
+        raise ValueError("Parsed logs cannot be empty.")
+
+    # Build the introductory part of the prompt
+    prompt = (
+        "You are an advanced learning assistant that helps developers improve their coding practices "
+        "and workflows. Analyze the following recent user interactions to detect trends, provide actionable "
+        "recommendations, and suggest educational resources.\n\n"
+        "### Developer Logs:\n"
+    )
+
+    # Add each log to the prompt
+    for idx, log in enumerate(parsed_logs, start=1):
+        prompt += f"{idx}. Agent: {log['agent']}\n"
+        prompt += f"   - Code: {log.get('code', 'N/A')}\n"
+        prompt += f"   - Language: {log.get('language', 'N/A')}\n"
+
+        # Add agent-specific details
+        if log['agent'] == "debugging":
+            prompt += f"   - Errors: {', '.join(log.get('errors', [])) or 'None'}\n"
+            prompt += f"   - Suggestions: {', '.join(log.get('suggestions', [])) or 'None'}\n"
+            prompt += f"   - Explanation: {log.get('explanation', 'N/A')}\n"
+        elif log['agent'] == "optimization":
+            prompt += f"   - Inefficiencies: {', '.join(log.get('inefficiencies', [])) or 'None'}\n"
+            prompt += f"   - Suggestions: {', '.join(log.get('suggestions', [])) or 'None'}\n"
+            prompt += f"   - Explanation: {log.get('explanation', 'N/A')}\n"
+        elif log['agent'] == "documentation":
+            prompt += f"   - Documentation Type: {log.get('documentation_type', 'N/A')}\n"
+            prompt += f"   - Docstring: {', '.join(log.get('docstring', [])) or 'None'}\n"
+            prompt += f"   - Readme: {', '.join(log.get('readme', [])) or 'None'}\n"
+            prompt += f"   - Overview: {', '.join(log.get('overview', [])) or 'None'}\n"
+            prompt += f"   - Comments: {', '.join(log.get('comments', [])) or 'None'}\n"
+
+        # Add timestamp
+        prompt += f"   - Timestamp: {log.get('timestamp', 'N/A')}\n\n"
+
+    # Add instructions for the LLM
+    prompt += (
+        "### Tasks:\n"
+        "1. Identify trends in the user's coding behavior, such as recurring issues, preferred programming languages, "
+        "or frequently requested tasks.\n"
+        "2. Provide actionable recommendations, including tools, libraries, or workflows that could improve their development process.\n"
+        "3. Suggest educational resources, such as articles, tutorials, or documentation, to help the user improve their skills.\n\n"
+        "### Output Format:\n"
+        "- **Trends**: Summarize patterns detected in the user's behavior.\n"
+        "- **Recommendations**: List actionable suggestions, including tools, libraries, or workflows.\n"
+        "- **Resources**: Provide links to relevant articles, tutorials, or tools."
+    )
+
+    return prompt
+
