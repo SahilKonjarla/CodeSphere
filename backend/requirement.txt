@@ -8,3 +8,4 @@ langchain-community
 pytest
 pytest-mock
 psycopg2
+langgraph
