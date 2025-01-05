@@ -156,3 +156,15 @@ def get_learner_prompt(parsed_logs: list) -> str:
 
     return prompt
 
+
+def get_orchestrator_prompt() -> str:
+    """
+    Returns the custom prompt for the orchestrator agent.
+    """
+    return (
+        "You are an Orchestrator Agent that manages multiple specialized tools to help developers debug, optimize, "
+        "and document their code. Based on the input, identify the correct tool(s) to invoke and return the output "
+        "in a structured format."
+    )
+
+
