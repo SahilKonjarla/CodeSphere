@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain_core.tools import tool
-from langgraph.checkpoint.memory import MemorySaver
+# from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
 from app.utils.prompts import get_orchestrator_prompt
 from app.services.debug_service import process_debug_request
@@ -53,7 +53,7 @@ async def document_tool(code: str, user_id: str, doc_type: str) -> dict:
     """
     Generates documents for given code
     :param code: The code given
-    :param user_id: Id of the current user
+    :param user_id: id of the current user
     :param doc_type: The type of documentation
     :return: The documentation from the agent
     """
@@ -79,7 +79,45 @@ def initialize_orchestrator():
         optimize_tool,
         document_tool,
     ]
-    memory = MemorySaver()
+    # memory = MemorySaver()
     model = ChatOpenAI(model="gpt-4o-mini")
-    agent_exec = create_react_agent(model, tools, checkpointer=memory)
+    agent_exec = create_react_agent(model, tools)
     return agent_exec
+
+
+def process_orchestrator_request(request: dict) -> dict:
+    """
+    Handles user requests by invoking the appropriate tools via the orchestrator.
+    :param request: request to be handled by the orchestrator
+    :return: Aggregated response from the orchestrator
+    """
+    orchestrator = initialize_orchestrator()
+
+    # Extract the details
+    task = request.get("task")
+    code = request.get("code", "")
+    user_id = request.get("user_id", "")
+    additional_params = request.get("additional_params", {})
+    prompt = get_orchestrator_prompt()
+
+    # Build a task-specific input for the orchestrator
+    if task == "debug":
+        return orchestrator.invoke({
+            "prompt": prompt,
+            "code": code,
+            "user_id": user_id,
+        })
+    elif task == "optimize":
+        return orchestrator.invoke({
+            "prompt": prompt,
+            "code": code,
+            "user_id": user_id,
+            "goal": additional_params.get("goal", "performance"),
+        })
+    elif task == "document":
+        return orchestrator.invoke({
+            "prompt": prompt,
+            "code": code,
+            "user_id": user_id,
+            "doc_type": additional_params.get("doc_type", "docstring"),
+        })
