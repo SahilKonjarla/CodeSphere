@@ -85,7 +85,7 @@ def initialize_orchestrator():
     return agent_exec
 
 
-def process_orchestrator_request(request: dict) -> dict:
+def process_orchestrator_request(request) -> dict:
     """
     Handles user requests by invoking the appropriate tools via the orchestrator.
     :param request: request to be handled by the orchestrator
@@ -94,16 +94,16 @@ def process_orchestrator_request(request: dict) -> dict:
     orchestrator = initialize_orchestrator()
 
     # Extract the details
-    task = request.get("task")
-    code = request.get("code", "")
-    user_id = request.get("user_id", "")
-    additional_params = request.get("additional_params", {})
+    task = request.task
+    code = request.code
+    user_id = request.user_id
+    additional_params = request.additional_params
     prompt = get_orchestrator_prompt()
 
     # Build a task-specific input for the orchestrator
     if task == "debug":
         return orchestrator.invoke({
-            "prompt": prompt,
+            "messages": task,
             "code": code,
             "user_id": user_id,
         })
