@@ -2,9 +2,10 @@ import os
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain_core.tools import tool
+from langchain_core.messages import HumanMessage, SystemMessage
 # from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
-from app.utils.prompts import get_orchestrator_prompt
+from app.utils.prompts import get_orchestrator_sys_prompt, get_orchestrator_prompt
 from app.services.debug_service import process_debug_request
 from app.services.optimize_service import process_optimize_request
 from app.services.document_service import (
@@ -24,7 +25,7 @@ if not OPEN_AI_KEY:
 
 
 @tool
-async def debug_tool(code: str, user_id: str) -> dict:
+def debug_tool(code: str, user_id: str) -> dict:
     """
     Debugs the given code
     :param code: the code to be debugged
@@ -98,8 +99,14 @@ def process_orchestrator_request(request) -> dict:
     code = request.code
     user_id = request.user_id
     additional_params = request.additional_params
-    prompt = get_orchestrator_prompt()
-
+    prompt = get_orchestrator_sys_prompt()
+    prompt1 = get_orchestrator_prompt(task, code, user_id)
+    messages = [
+        SystemMessage(content=prompt),
+        HumanMessage(content=prompt1)
+    ]
+    result = orchestrator.invoke({"messages": messages}, {"recursion_limit": 100})
+    """
     # Build a task-specific input for the orchestrator
     if task == "debug":
         return orchestrator.invoke({
@@ -121,3 +128,5 @@ def process_orchestrator_request(request) -> dict:
             "user_id": user_id,
             "doc_type": additional_params.get("doc_type", "docstring"),
         })
+    """
+    return result

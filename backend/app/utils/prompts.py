@@ -157,7 +157,7 @@ def get_learner_prompt(parsed_logs: list) -> str:
     return prompt
 
 
-def get_orchestrator_prompt() -> str:
+def get_orchestrator_sys_prompt() -> str:
     """
     Returns the custom prompt for the orchestrator agent.
     """
@@ -168,3 +168,19 @@ def get_orchestrator_prompt() -> str:
     )
 
 
+def get_orchestrator_prompt(task, code, user_id) -> str:
+    """
+    Returns the starter prompt for the orchestrator agent.
+    """
+    return f"""
+        ### Task:
+        {task}
+
+        ### Code:
+        {code}
+        
+        ### User_id:
+        {user_id}
+
+        Based on the task, determine the most suitable tool(s) to invoke and provide a clear and actionable response.
+    """
