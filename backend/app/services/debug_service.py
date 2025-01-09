@@ -17,7 +17,7 @@ if not OPEN_AI_KEY:
 model = ChatOpenAI(model="gpt-4o-mini")
 
 
-def process_debug_request(user_id: str, code: str):
+def process_debug_request(code: str, user_id: str):
     """
     Process the debugging request and return structured results.
     Args:

@@ -37,7 +37,7 @@ def debug_tool(code: str, user_id: str) -> dict:
 
 
 @tool
-async def optimize_tool(code: str, user_id: str, goal: str = 'performance') -> dict:
+def optimize_tool(code: str, user_id: str, goal: str = 'performance') -> dict:
     """
     Optimizes given code
     :param code: The code to be optimized
@@ -50,7 +50,7 @@ async def optimize_tool(code: str, user_id: str, goal: str = 'performance') -> d
 
 
 @tool
-async def document_tool(code: str, user_id: str, doc_type: str) -> dict:
+def document_tool(code: str, user_id: str, doc_type: str) -> dict:
     """
     Generates documents for given code
     :param code: The code given
@@ -106,27 +106,5 @@ def process_orchestrator_request(request) -> dict:
         HumanMessage(content=prompt1)
     ]
     result = orchestrator.invoke({"messages": messages}, {"recursion_limit": 100})
-    """
-    # Build a task-specific input for the orchestrator
-    if task == "debug":
-        return orchestrator.invoke({
-            "messages": task,
-            "code": code,
-            "user_id": user_id,
-        })
-    elif task == "optimize":
-        return orchestrator.invoke({
-            "prompt": prompt,
-            "code": code,
-            "user_id": user_id,
-            "goal": additional_params.get("goal", "performance"),
-        })
-    elif task == "document":
-        return orchestrator.invoke({
-            "prompt": prompt,
-            "code": code,
-            "user_id": user_id,
-            "doc_type": additional_params.get("doc_type", "docstring"),
-        })
-    """
+
     return result
