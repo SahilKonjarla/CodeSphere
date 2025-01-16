@@ -17,7 +17,7 @@ if not OPEN_AI_KEY:
 model = ChatOpenAI(model="gpt-4o-mini")
 
 
-def process_optimize_request(user_id: str, code: str, goal: str = "Looking at the code given. Please improve either the structure, memory usage, or runtime"):
+def process_optimize_request(code: str, user_id: str, goal: str = "Looking at the code given. Please improve either the structure, memory usage, or runtime"):
     """
     :param user_id: The id of the user
     :param code: The code to be optimized

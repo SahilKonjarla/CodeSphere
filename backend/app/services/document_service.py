@@ -91,7 +91,7 @@ def parse_agent_response(response: str) -> dict:
 
 
 # Process docstring request
-def process_docstring_request(user_id: str, code: str):
+def process_docstring_request(code: str, user_id: str):
     """
     :param user_id:
     :param code: The code snippet from the user
@@ -126,7 +126,7 @@ def process_docstring_request(user_id: str, code: str):
 
 
 # Process comments request
-def process_comments_request(user_id: str, code: str):
+def process_comments_request(code: str, user_id: str):
     """
     :param user_id:
     :param code: The code snippet from the user
@@ -161,7 +161,7 @@ def process_comments_request(user_id: str, code: str):
 
 
 # Process overview request
-def process_overview_request(user_id: str, code: str):
+def process_overview_request(code: str, user_id: str):
     """
     :param user_id:
     :param code: The code snippet from the user
@@ -196,7 +196,7 @@ def process_overview_request(user_id: str, code: str):
 
 
 # Process README request
-def process_readme_request(user_id: str, code: str):
+def process_readme_request(code: str, user_id: str):
     """
     :param user_id:
     :param code: The code snippet from the user

@@ -1,8 +1,10 @@
 import os
 from dotenv import load_dotenv
+from typing import Annotated
 from langchain_openai import ChatOpenAI
 from langchain_core.tools import tool
 from langchain_core.messages import HumanMessage, SystemMessage
+import json
 # from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
 from app.utils.prompts import get_orchestrator_sys_prompt, get_orchestrator_prompt
@@ -86,7 +88,36 @@ def initialize_orchestrator():
     return agent_exec
 
 
-def process_orchestrator_request(request) -> dict:
+def parse_response(response):
+    """
+
+    :param response: The raw response from the LLm
+    :return: A dictionary with the structured response from the specified agent
+    """
+    extracted_contents = []
+    try:
+        # Iterate through all messages in the response
+        for message in response.get("messages", []):
+            # Handle different types of message objects
+            if hasattr(message, "type") and message.type == "tool":
+                # Access attributes directly for non-dictionary objects
+                content = getattr(message, "content", None)
+
+                # Parse content if it's a JSON string
+                if content:
+                    try:
+                        parsed_content = json.loads(content)
+                        extracted_contents.append(parsed_content)
+                    except json.JSONDecodeError:
+                        # If content is not valid JSON, append the raw string
+                        extracted_contents.append(content)
+    except Exception as e:
+        print(f"Exception while parsing response: {e}")
+
+    return extracted_contents
+
+
+def process_orchestrator_request(request) -> list:
     """
     Handles user requests by invoking the appropriate tools via the orchestrator.
     :param request: request to be handled by the orchestrator
@@ -106,5 +137,6 @@ def process_orchestrator_request(request) -> dict:
         HumanMessage(content=prompt1)
     ]
     result = orchestrator.invoke({"messages": messages}, {"recursion_limit": 100})
+    response = parse_response(result)
 
-    return result
+    return response
