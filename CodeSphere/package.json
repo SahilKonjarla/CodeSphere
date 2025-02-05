@@ -1,8 +1,9 @@
 {
   "name": "CodeSphere",
-  "displayName": "frontend",
+  "displayName": "CodeSphere",
   "description": "A multi-agent assistant for debugging, optimizing, and documenting code",
   "version": "0.0.1",
+  "publisher": "CodeSphere",
   "engines": {
     "vscode": "^1.96.0"
   },
@@ -15,7 +16,16 @@
     "commands": [
       {
         "command": "CodeSphere.helloWorld",
-        "title": "Hello World"
+        "title": "Say Hello"
+      }
+    ],
+    "chatParticipants": [
+      {
+        "id": "CodeSphere.code-assistant",
+        "name": "Code Assistant",
+        "fullName": "assistant",
+        "description": "Your helpful coding assistant for optimizing, debuing, suggesting, and debugging your code",
+        "isSticky": true
       }
     ]
   },
