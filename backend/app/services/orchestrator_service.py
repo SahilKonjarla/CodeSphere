@@ -126,12 +126,11 @@ def process_orchestrator_request(request) -> list:
     orchestrator = initialize_orchestrator()
 
     # Extract the details
-    task = request.task
-    code = request.code
     user_id = request.user_id
+    message = request.message
     additional_params = request.additional_params
     prompt = get_orchestrator_sys_prompt()
-    prompt1 = get_orchestrator_prompt(task, code, user_id)
+    prompt1 = get_orchestrator_prompt(message, user_id)
     messages = [
         SystemMessage(content=prompt),
         HumanMessage(content=prompt1)

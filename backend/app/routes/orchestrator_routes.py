@@ -9,9 +9,8 @@ orchestrator_router = APIRouter()
 
 # Define the request model
 class OrchestratorRequest(BaseModel):
-    code: str
     user_id: str
-    task: str
+    message: str
     additional_params: dict
 
 
