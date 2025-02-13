@@ -5,17 +5,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-public class OptimizeRequest {
+public class DebugModel {
     @Getter
     @Setter
     String user_id;
-    String code;
+    String message;
 
     @Override
     public String toString() {
-        return "OptimizeRequest{" +
+        return "DebugRequest{" +
                 "user_id='" + user_id + '\'' +
-                "code='" + code + '\'' +
-                "}";
+                "code='" + message + '\'' +
+                '}';
     }
 }

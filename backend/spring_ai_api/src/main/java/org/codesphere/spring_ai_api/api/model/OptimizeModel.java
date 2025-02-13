@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-public class TestingRequest {
+public class OptimizeModel {
     @Getter
     @Setter
     String user_id;
@@ -13,7 +13,7 @@ public class TestingRequest {
 
     @Override
     public String toString() {
-        return "TestingRequest{" +
+        return "OptimizeRequest{" +
                 "user_id='" + user_id + '\'' +
                 "code='" + code + '\'' +
                 "}";

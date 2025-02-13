@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-public class DebugRequest {
+public class ReviewModel {
     @Getter
     @Setter
     String user_id;
@@ -13,9 +13,9 @@ public class DebugRequest {
 
     @Override
     public String toString() {
-        return "DebugRequest{" +
+        return "ReviewRequest{" +
                 "user_id='" + user_id + '\'' +
                 "code='" + code + '\'' +
-                '}';
+                "}";
     }
 }
