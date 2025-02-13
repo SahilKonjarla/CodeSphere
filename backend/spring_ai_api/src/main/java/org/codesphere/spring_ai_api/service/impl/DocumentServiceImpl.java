@@ -1,4 +1,4 @@
 package org.codesphere.spring_ai_api.service.impl;
 
-public interface DocumentServiceImpl {
+public class DocumentServiceImpl {
 }
