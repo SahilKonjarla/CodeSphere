@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-public class DocumentRequest {
+public class ReviewRequest {
     @Getter
     @Setter
     String user_id;
@@ -13,7 +13,7 @@ public class DocumentRequest {
 
     @Override
     public String toString() {
-        return "DocumentRequest{" +
+        return "ReviewRequest{" +
                 "user_id='" + user_id + '\'' +
                 "code='" + code + '\'' +
                 "}";
