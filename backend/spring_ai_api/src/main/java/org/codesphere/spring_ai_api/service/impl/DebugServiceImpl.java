@@ -11,6 +11,6 @@ public class DebugServiceImpl implements DebugService {
 
     @Async
     public CompletableFuture<List<DebugModel>> getDebug(String message, String user_id) {
-        
+
     }
 }
